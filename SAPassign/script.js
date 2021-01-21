@@ -14,7 +14,6 @@ jQuery(document).ready(function() {
         datalive = data;
         length = data.length;
         for (var i = 0; i < length; i++) {
-
             var memberdetail = document.createElement("div");
             memberdetail.id = "mem-" + i;
             memberdetail.className = "member-detail";
@@ -68,10 +67,16 @@ jQuery(document).ready(function() {
             $("#mem-slaunch-" + i).html("<span class='title'> Successful Launch:</span>" + data[i].launch_success);
             $("#mem-slanding-" + i).html("<span class='title'>Successful Landing:</span>" + data[i].rocket.first_stage.cores[0].land_success);
         }
-
     });
-    $("a.year").on("click mousedown touchstart", function() {
+    $(".launch-year a.year").on("click touchstart", function(event) {
+        event.stopPropagation();
         var year = $(this).html();
+        console.log($(this).hasClass("active"));
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $(".member-detail").show();
+            return true;
+        }
         $("a.year").removeClass("active");
         $(this).addClass("active");
         for (i = 0; i < datalive.length; i++) {
@@ -82,10 +87,83 @@ jQuery(document).ready(function() {
             }
         }
     });
-    $("a.launch").on("click mousedown touchstart", function() {
-        var launch = $(this).text();
+    $("#true_launch").on("click touchstart", function() {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $(".member-detail").show();
+            return true;
+        }
         $("a.launch").removeClass("active");
         $(this).addClass("active");
-        console.log(launch);
+        for (i = 0; i < datalive.length; i++) {
+            if (datalive[i].launch_success) {
+                $("#mem-detail" + i).show();
+            } else {
+                $("#mem-detail" + i).hide();
+            }
+
+        }
+    });
+
+    $("#false_launch").on("click touchstart", function() {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $(".member-detail").show();
+            return true;
+        }
+        $("a.launch").removeClass("active");
+        $(this).addClass("active");
+        for (i = 0; i < datalive.length; i++) {
+            if (!(datalive[i].launch_success)) {
+                $("#mem-detail" + i).show();
+            } else {
+                $("#mem-detail" + i).hide();
+            }
+
+        }
+    });
+
+
+
+
+    $("#true_land").on("click touchstart", function() {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $(".member-detail").show();
+            return true;
+        }
+        $("a.landing").removeClass("active");
+        $(this).addClass("active");
+        for (i = 0; i < datalive.length; i++) {
+            console.log(datalive[i].rocket.first_stage.cores[0].land_success);
+            if (data[i].rocket.first_stage.cores[0].land_success) {
+                $("#mem-detail" + i).show();
+                console.log("inside true");
+            } else {
+                $("#mem-detail" + i).hide();
+                console.log("inside false");
+            }
+
+        }
+    });
+
+    $("#false_land").on("click touchstart", function() {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $(".member-detail").show();
+            return true;
+        }
+        $("a.landing").removeClass("active");
+        $(this).addClass("active");
+        for (i = 0; i < datalive.length; i++) {
+            if (!(datalive[i].rocket.first_stage.cores[0].land_success) && !(datalive[i].rocket.first_stage.cores[0].land_success == null)) {
+                $("#mem-detail" + i).show();
+                console.log("inside true");
+            } else {
+                $("#mem-detail" + i).hide();
+                console.log("inside false");
+            }
+
+        }
     });
 });
